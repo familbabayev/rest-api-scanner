@@ -1,7 +1,25 @@
 {% extends 'main.html' %}
 {% block content %}
 
-<button id="myButton">Click</button>
-<p id="myP"></p>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="container justify-content-center">
+        <div class="col-md-6">
+            <div class="input-group input-group-outline my-3">
+                <label class="form-label">URL link</label>
+                <input name="url" type="url" class="form-control" id="url-input">
+            </div>
+        </div>
+        <!-- <div class="col-md-6">
+            <label for="file-input">API Definition File</label>
+            <input name="file" type="file" class="form-control-file" id="file-input">
+        </div> -->
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+
+</form>
+
 
 {% endblock %}
