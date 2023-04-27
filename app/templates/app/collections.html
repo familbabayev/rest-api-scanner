@@ -1,0 +1,62 @@
+{% extends 'main.html' %}
+{% block content %}
+
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+
+                </div>
+                <div class="card-body px-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        API Collection Name</th>
+
+                                    <th class="text-secondary opacity-7"></th>
+                                    <th class="text-secondary opacity-7"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for collection in collections %}
+                                <tr>
+                                    <td class="align-middle text-center">
+                                        <span class="text-secondary text-xs font-weight-bold">
+                                            {{ collection.title }}
+                                        </span>
+                                    </td>
+
+                                    <td class="align-middle">
+                                        <a href="{% url 'view-collection' collection.id %}"
+                                            class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
+                                            data-original-title="Edit user">
+                                            View
+                                        </a>
+                                    </td>
+                                    <td class="align-middle">
+                                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs"
+                                            data-toggle="tooltip" data-original-title="Edit user">
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <a href="{% url 'create-collection' %}" class="btn btn-primary">
+                <i class="material-icons">add</i> Add
+            </a>
+        </div>
+    </div>
+
+
+
+    {% endblock %}

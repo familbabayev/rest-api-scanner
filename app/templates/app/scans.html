@@ -1,0 +1,69 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-4 mx-4">
+
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+
+                    <div class="input-group input-group-static mb-4">
+                        <label for="exampleFormControlSelect1" class="ms-0">
+                            <h6>API Collection</h6>
+                        </label>
+                        <select class="form-control" id="exampleFormControlSelect1">
+                            <option>Collection 1</option>
+                            <option>Collection 2</option>
+                            <option>Collection 3</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group input-group-static mb-4">
+                        <label for="exampleFormControlSelect1" class="ms-0">
+                            <h6>Authentication Type</h6>
+                        </label>
+                        <select class="form-control" id="exampleFormControlSelect1">
+                            <option>Basic</option>
+                            <option>JWT</option>
+                            <option>Collection 3</option>
+                        </select>
+                    </div>
+
+
+                    <div class="input-group input-group-static mb-4">
+                        <label for="exampleFormControlSelect1" class="ms-0">
+                            <h6>Authentication Details</h6>
+                        </label>
+                        <div class="input-group input-group-dynamic">
+                            <textarea class="form-control" rows="5" placeholder="" spellcheck="false"></textarea>
+                        </div>
+                    </div>
+
+
+                    <div class="input-group input-group-static mb-4">
+                        <label for="exampleFormControlSelect1" class="ms-0">
+                            <h6>Scan Type</h6>
+                        </label>
+                        <select class="form-control" id="exampleFormControlSelect1">
+                            <option>Quick Scan</option>
+                            <option>Full Scan</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-secondary">START SCAN</button>
+
+                </div>
+        </div>
+
+        </form>
+
+
+    </div>
+</div>
+
+</div>
+
+
+{% endblock %}

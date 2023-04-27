@@ -38,3 +38,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
+
+
+class Collection(models.Model):
+    title = models.CharField(max_length=150)
+    file = models.FileField(upload_to='')
