@@ -5,6 +5,10 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
+import os
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -43,3 +47,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Collection(models.Model):
     title = models.CharField(max_length=150)
     file = models.FileField(upload_to='')
+
+
+@receiver(pre_delete, sender=Collection)
+def delete_file(sender, instance, **kwargs):
+    if instance.file:
+        if os.path.isfile(instance.file.path):
+            os.remove(instance.file.path)

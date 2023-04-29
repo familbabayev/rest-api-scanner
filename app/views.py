@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from django.conf import settings
-import os, json
+from django.http import HttpResponse
+import json
 
 from .modules import main
 from .modules.specification_parser import SpecificationParser
@@ -15,6 +15,7 @@ def home(request):
 def collections(request):
     collections = Collection.objects.all()
     context = {'collections': collections}
+
     return render(request, 'app/collections.html', context)
 
 
@@ -32,10 +33,10 @@ def createCollection(request):
 
 def viewCollection(request, pk):
     collection = Collection.objects.get(id=pk)
+    spec_file_path = collection.file.path
 
-    spec_file_path = os.getcwd() + settings.MEDIA_URL + str(collection.file)
     sp = SpecificationParser(spec_file_path, 'openapi')
-    # print(spec_file_path)
+
     openapi_spec = sp.parse()
 
     openapi_spec_json = json.dumps(openapi_spec)
@@ -43,19 +44,27 @@ def viewCollection(request, pk):
     return render(request, 'view-collection.html', context)
 
 
+def deleteCollection(request, pk):
+    if request.method == 'DELETE':
+        collection = Collection.objects.get(id=pk)
+        collection.delete()
+
+        return HttpResponse('Success', status=200)
+
+
 def scans(request):
     if request.method == 'POST':
         collection_id = request.POST['collection']
-
         collection = Collection.objects.get(id=collection_id)
+        spec_file_path = collection.file.path
 
-        spec_file_path = os.getcwd() + settings.MEDIA_URL + str(collection.file)
         res = main.runTests(spec_file_path, 'openapi')
 
         print(res)
         return redirect('home')
 
     api_collections = Collection.objects.all()
+
     context = {"collections": api_collections}
     return render(request, 'app/scans.html', context)
     # return render(request, 'mainKit.html')
