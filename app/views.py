@@ -45,7 +45,9 @@ def viewCollection(request, pk):
 
 def scans(request):
     if request.method == 'POST':
-        collection = Collection.objects.get(id=7)
+        collection_id = request.POST['collection']
+
+        collection = Collection.objects.get(id=collection_id)
 
         spec_file_path = os.getcwd() + settings.MEDIA_URL + str(collection.file)
         res = main.runTests(spec_file_path, 'openapi')
@@ -53,8 +55,19 @@ def scans(request):
         print(res)
         return redirect('home')
 
-    return render(request, 'app/scans.html')
+    api_collections = Collection.objects.all()
+    context = {"collections": api_collections}
+    return render(request, 'app/scans.html', context)
+    # return render(request, 'mainKit.html')
 
 
 def vulnerabilities(request):
     return render(request, 'app/vulnerabilities.html')
+
+
+def register(request):
+    return render(request, 'register.html')
+
+
+def login(request):
+    return render(request, 'login.html')

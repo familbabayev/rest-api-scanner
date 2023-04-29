@@ -13,10 +13,10 @@
                         <label for="exampleFormControlSelect1" class="ms-0">
                             <h6>API Collection</h6>
                         </label>
-                        <select class="form-control" id="exampleFormControlSelect1">
-                            <option>Collection 1</option>
-                            <option>Collection 2</option>
-                            <option>Collection 3</option>
+                        <select class="form-control" id="exampleFormControlSelect1" name="collection">
+                            {% for collection in collections %}
+                            <option value="{{ collection.id }}">{{ collection.title }}</option>
+                            {% endfor %}
                         </select>
                     </div>
 
@@ -24,10 +24,10 @@
                         <label for="exampleFormControlSelect1" class="ms-0">
                             <h6>Authentication Type</h6>
                         </label>
-                        <select class="form-control" id="exampleFormControlSelect1">
-                            <option>Basic</option>
-                            <option>JWT</option>
-                            <option>Collection 3</option>
+                        <select class="form-control" id="exampleFormControlSelect1" name="authtype">
+                            <option>Basic Authentication</option>
+                            <option>JSON Web Token</option>
+                            <option>OAuth</option>
                         </select>
                     </div>
 
@@ -42,14 +42,28 @@
                     </div>
 
 
-                    <div class="input-group input-group-static mb-4">
+                    <!-- <div class="input-group input-group-static mb-4">
                         <label for="exampleFormControlSelect1" class="ms-0">
                             <h6>Scan Type</h6>
                         </label>
-                        <select class="form-control" id="exampleFormControlSelect1">
+                        <select class="form-control" id="exampleFormControlSelect1" name="scantype">
                             <option>Quick Scan</option>
                             <option>Full Scan</option>
                         </select>
+                    </div> -->
+                    <label for="" class="ms-0">
+                        <h6>Scan Type</h6>
+                    </label>
+                    <div class="input-group input-group-static mb-4">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="scantype" value="quick"
+                                id="customRadio1">
+                            <label class="custom-control-label" for="customRadio1">Quick Scan</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="scantype" value="full" id="customRadio2">
+                            <label class="custom-control-label" for="customRadio2">Full Scan</label>
+                        </div>
                     </div>
 
                     <button type="submit" class="btn btn-secondary">START SCAN</button>
