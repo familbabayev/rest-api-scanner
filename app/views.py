@@ -1,30 +1,51 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib.auth import login, logout
 import json
 
+from .forms import CustomAuthenticationForm, CustomUserCreationForm
 from .modules import main
 from .modules.specification_parser import SpecificationParser
 from .models import Collection
 
 
 def home(request):
-    context = {}
+    user = request.user
+
+    if str(user) == "AnonymousUser":
+        loggedin = False
+    else:
+        loggedin = True
+
+    context = {'loggedin': loggedin}
     return render(request, 'app/dashboard.html', context)
 
 
 def collections(request):
-    collections = Collection.objects.all()
-    context = {'collections': collections}
+    user = request.user
+    if str(user) == "AnonymousUser":
+        collections = Collection.objects.all()
+    else:
+        collections = user.collection_set.all()
 
+    context = {'collections': collections}
     return render(request, 'app/collections.html', context)
 
 
 def createCollection(request):
     if request.method == 'POST':
+        user = request.user
+
         uploaded_file = request.FILES['collection-file']
         file_name = uploaded_file.name
 
-        collection = Collection(title=file_name, file=uploaded_file)
+        if str(user) == "AnonymousUser":
+            collection = Collection(title=file_name, file=uploaded_file)
+        else:
+            collection = Collection(
+                title=file_name, file=uploaded_file, owner=user
+            )
+
         collection.save()
         return redirect('collections')
 
@@ -63,20 +84,46 @@ def scans(request):
         print(res)
         return redirect('home')
 
-    api_collections = Collection.objects.all()
+    user = request.user
+    if str(user) == "AnonymousUser":
+        collections = Collection.objects.all()
+    else:
+        collections = user.collection_set.all()
 
-    context = {"collections": api_collections}
+    context = {"collections": collections}
     return render(request, 'app/scans.html', context)
-    # return render(request, 'mainKit.html')
 
 
 def vulnerabilities(request):
     return render(request, 'app/vulnerabilities.html')
 
 
-def register(request):
-    return render(request, 'register.html')
+def registerUser(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = CustomUserCreationForm()
+
+    context = {'form': form}
+    return render(request, 'register.html', context)
 
 
-def login(request):
-    return render(request, 'login.html')
+def loginUser(request):
+    if request.method == 'POST':
+        form = CustomAuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            login(request, form.get_user())
+            return redirect('home')
+    else:
+        form = CustomAuthenticationForm()
+
+    context = {'form': form}
+    return render(request, 'login.html', context)
+
+
+def logoutUser(request):
+    logout(request)
+    return redirect('login')

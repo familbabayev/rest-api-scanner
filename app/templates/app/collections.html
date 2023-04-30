@@ -9,14 +9,15 @@
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
 
                 </div>
-                <div class="card-body px-0 pb-2">
+                <div class="card-body px-0 pb-0">
                     <div class="table-responsive p-0">
                         <table class="table align-items-center mb-0">
                             <thead>
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         API Collection Name</th>
-
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        API Collection Type</th>
                                     <th class="text-secondary opacity-7"></th>
                                     <th class="text-secondary opacity-7"></th>
                                 </tr>
@@ -29,17 +30,21 @@
                                             {{ collection.title }}
                                         </span>
                                     </td>
-
-                                    <td class="align-middle">
+                                    <td class="align-middle text-center">
+                                        <span class="text-secondary text-xs font-weight-bold">
+                                            OpenApi 3
+                                        </span>
+                                    </td>
+                                    <td class="align-middle text-center">
                                         <a href="{% url 'view-collection' collection.id %}"
-                                            class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
-                                            data-original-title="Edit user">
+                                            class="btn bg-gradient-info btn-sm " data-toggle="tooltip"
+                                            data-original-title="View collection">
                                             View
                                         </a>
                                     </td>
-                                    <td class="align-middle">
-                                        <a href="" class="text-secondary font-weight-bold text-xs delete-link"
-                                            data-toggle="tooltip" data-original-title="Edit user"
+                                    <td class="align-middle text-center">
+                                        <a href="" class="btn bg-gradient-danger btn-sm delete-link"
+                                            data-toggle="tooltip" data-original-title="Delete collection"
                                             data-id="{{ collection.id }}">
                                             Delete
                                         </a>

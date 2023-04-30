@@ -15,6 +15,7 @@ urlpatterns = [
     ),
     path('scans/', views.scans, name="scans"),
     path('vulnerabilities/', views.vulnerabilities, name="vulnerabilities"),
-    path('login/', views.login, name="login"),
-    path('register/', views.register, name="register"),
+    path('login/', views.loginUser, name="login"),
+    path('register/', views.registerUser, name="register"),
+    path('logout/', views.logoutUser, name="logout"),
 ]

@@ -45,6 +45,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Collection(models.Model):
+    owner = models.ForeignKey(
+        User, on_delete=models.CASCADE, null=True, blank=True
+    )
     title = models.CharField(max_length=150)
     file = models.FileField(upload_to='')
 

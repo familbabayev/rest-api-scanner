@@ -1,8 +1,15 @@
 {% extends 'main.html' %}
 {% block content %}
 
-NUMBERS
+<h6>NUMBERS</h6>
+<br>
+<h6>CHARTS</h6>
 
-CHARTS
+{% if loggedin %}
+<a href="{% url 'logout' %}" class="btn bg-gradient-info btn-sm ">
+    Logout
+</a>
+{% endif %}
+
 
 {% endblock %}
