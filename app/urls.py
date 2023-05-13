@@ -7,7 +7,7 @@ urlpatterns = [
     path(
         'collections/create', views.createCollection, name="create-collection"
     ),
-    path('collections/<str:pk>/', views.viewCollection, name="view-collection"),
+    path('collections/<int:pk>/', views.viewCollection, name="view-collection"),
     path(
         'collections/<int:pk>/delete/',
         views.deleteCollection,

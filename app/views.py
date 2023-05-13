@@ -81,8 +81,10 @@ def scans(request):
 
         res = main.runTests(spec_file_path, 'openapi')
 
-        print(res)
-        return redirect('home')
+        print("VIEWS", res)
+
+        context = {'results': res}
+        return render(request, 'app/vulnerabilities.html', context)
 
     user = request.user
     if str(user) == "AnonymousUser":

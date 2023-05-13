@@ -26,6 +26,7 @@
                             </thead>
                             <tbody>
 
+                                {% for result in results %}
                                 <tr>
                                     <td class="">
                                         <span class="text-secondary text-xs font-weight-bold mx-3">GET</span>
@@ -34,14 +35,14 @@
                                         <span class="text-secondary text-xs font-weight-bold mx-3">/users/v1</span>
                                     </td>
                                     <td class="">
-                                        <span class="text-secondary text-xs font-weight-bold mx-3">Server Side Request
-                                            Forgery</span>
+                                        <span class="text-secondary text-xs font-weight-bold mx-3">{{ result }}</span>
                                     </td>
                                     <td class="">
                                         <span class="text-secondary text-xs font-weight-bold mx-3">Low</span>
                                     </td>
-
                                 </tr>
+                                {% endfor %}
+
                                 <tr>
                                     <td class="">
                                         <span class="text-secondary text-xs font-weight-bold mx-3">POST</span>
