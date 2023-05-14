@@ -6,20 +6,19 @@ def run(url, scan_id):
     results = []
 
     security_headers = [
-        "X-XSS-Protection",
-        "X-Content-Type-Options",
-        "X-Frame-Options",
-        "Content-Security-Policy",
-        "Strict-Transport-Security",
+        (1, "X-XSS-Protection"),
+        (2, "X-Content-Type-Options"),
+        (3, "X-Frame-Options"),
+        (4, "Content-Security-Policy"),
+        (5, "Strict-Transport-Security"),
     ]
 
     response = requests.get(url)
     print("RESPONSE", response.text)
 
-    for header in security_headers:
+    for id, header in security_headers:
         if header not in response.headers:
-            # vulnerability = Vulnerability.objects.get(title=header)
-            ScanDetail.objects.create(vulnerability_id=1, scan_id=scan_id)
+            ScanDetail.objects.create(vulnerability_id=id, scan_id=scan_id)
 
             results.append(header)
             print(f"{header} header is missing")

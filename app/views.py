@@ -100,7 +100,7 @@ def deleteCollection(request, pk):
         return HttpResponse('Success', status=200)
 
 
-def scans(request):
+def newScan(request):
     user = request.user
     if request.method == 'POST':
         collection_id = request.POST['collection']
@@ -112,13 +112,9 @@ def scans(request):
         else:
             scan = Scan.objects.create(user=user)
 
-        print("SCAN ID", scan.id)
-        res = main.runTests(spec_file_path, 'openapi', scan.id)
+        main.runTests(spec_file_path, 'openapi', scan.id)
 
-        print("VIEWS", res)
-
-        context = {'results': res}
-        return render(request, 'app/vulnerabilities.html', context)
+        return redirect('single-scan', scan.id)
 
     if str(user) == "AnonymousUser":
         collections = Collection.objects.all()
@@ -126,11 +122,26 @@ def scans(request):
         collections = user.collection_set.all()
 
     context = {"collections": collections}
-    return render(request, 'app/scans.html', context)
+    return render(request, 'app/new-scan.html', context)
 
 
-def vulnerabilities(request):
-    return render(request, 'app/vulnerabilities.html')
+def scans(request):
+    return render(request, 'app/single-scan.html')
+
+
+def singleScan(request, pk):
+    user = request.user
+
+    last_scan = Scan.objects.filter(user=user).latest('id')
+
+    scan_details = last_scan.scandetail_set.select_related('vulnerability')
+
+    context = {'scan_details': scan_details, 'last_scan_id': last_scan.id}
+    return render(request, 'app/single-scan.html', context)
+
+
+def singleScanVuln(request, pk, pk2):
+    return render(request, 'app/single-scan-vuln.html')
 
 
 def registerUser(request):

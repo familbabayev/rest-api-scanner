@@ -86,6 +86,16 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+  var rows = document.querySelectorAll('.clickable-row');
+
+  rows.forEach(function (row) {
+    row.addEventListener('click', function () {
+      window.location.href = this.dataset.href;
+    });
+  });
+});
+
 var pieData = {
   labels: ['Label 1', 'Label 2', 'Label 3'],
   datasets: [

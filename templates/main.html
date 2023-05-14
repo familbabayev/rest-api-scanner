@@ -30,6 +30,8 @@
     <!-- Material Kit CSS -->
     <!-- <link id="pagestyle" href="{% static 'uikit/assets/css/material-kit.css' %}" rel="stylesheet" /> -->
 
+    <link id="pagestyle" href="{% static 'css/main.css' %}" rel="stylesheet" />
+
     <!-- Nepcha Analytics (nepcha.com) -->
     <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
     <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
@@ -63,20 +65,20 @@
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10">table_view</i>
                         </div>
-                        <span class="nav-link-text ms-1">Collections</span>
+                        <span class="nav-link-text ms-1">API Collections</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white " href="{% url 'scans' %}">
+                    <a class="nav-link text-white " href="{% url 'new-scan' %}">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10">find_replace</i>
                         </div>
-                        <span class="nav-link-text ms-1">Scans</span>
+                        <span class="nav-link-text ms-1">New Scan</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link text-white " href="{% url 'vulnerabilities' %}">
+                    <a class="nav-link text-white " href="{% url 'scans' %}">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10">pest_control</i>
                         </div>
