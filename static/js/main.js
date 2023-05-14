@@ -85,3 +85,22 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
+
+var pieData = {
+  labels: ['Label 1', 'Label 2', 'Label 3'],
+  datasets: [
+    {
+      data: [30, 40, 30],
+      backgroundColor: ['#ff6384', '#36a2eb', '#ffce56'],
+    },
+  ],
+};
+
+// Get the canvas element
+var ctx = document.getElementById('myChart').getContext('2d');
+
+// Create the pie chart
+var myChart = new Chart(ctx, {
+  type: 'pie',
+  data: pieData,
+});

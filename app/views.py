@@ -6,18 +6,45 @@ import json
 from .forms import CustomAuthenticationForm, CustomUserCreationForm
 from .modules import main
 from .modules.specification_parser import SpecificationParser
-from .models import Collection
+from .models import Collection, Scan, ScanDetail
 
 
 def home(request):
     user = request.user
 
+    loggedin = True
     if str(user) == "AnonymousUser":
         loggedin = False
-    else:
-        loggedin = True
 
-    context = {'loggedin': loggedin}
+    if loggedin:
+        scan = Scan.objects.get(user=user)
+
+        severity_counts = {'High': 0, 'Medium': 0, 'Low': 0, 'Info': 0}
+
+        count_info = ScanDetail.objects.filter(
+            scan=scan, vulnerability__severity="Info"
+        ).count()
+        severity_counts["Info"] = count_info
+
+        count_low = ScanDetail.objects.filter(
+            scan=scan, vulnerability__severity="Low"
+        ).count()
+        severity_counts["Low"] = count_low
+
+        count_medium = ScanDetail.objects.filter(
+            scan=scan, vulnerability__severity="Medium"
+        ).count()
+        severity_counts["Medium"] = count_medium
+
+        count_high = ScanDetail.objects.filter(
+            scan=scan, vulnerability__severity="High"
+        ).count()
+        severity_counts["High"] = count_high
+
+    context = {
+        'loggedin': loggedin,
+        'severity_counts': severity_counts,
+    }
     return render(request, 'app/dashboard.html', context)
 
 
@@ -74,19 +101,25 @@ def deleteCollection(request, pk):
 
 
 def scans(request):
+    user = request.user
     if request.method == 'POST':
         collection_id = request.POST['collection']
         collection = Collection.objects.get(id=collection_id)
         spec_file_path = collection.file.path
 
-        res = main.runTests(spec_file_path, 'openapi')
+        if str(user) == "AnonymousUser":
+            scan = Scan.objects.create()
+        else:
+            scan = Scan.objects.create(user=user)
+
+        print("SCAN ID", scan.id)
+        res = main.runTests(spec_file_path, 'openapi', scan.id)
 
         print("VIEWS", res)
 
         context = {'results': res}
         return render(request, 'app/vulnerabilities.html', context)
 
-    user = request.user
     if str(user) == "AnonymousUser":
         collections = Collection.objects.all()
     else:

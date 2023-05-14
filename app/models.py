@@ -52,6 +52,31 @@ class Collection(models.Model):
     file = models.FileField(upload_to='')
 
 
+class Vulnerability(models.Model):
+    title = models.CharField(max_length=255)
+    recommendation = models.TextField()
+    severity = models.CharField(max_length=150)
+
+
+class Scan(models.Model):
+    vulnerabilities = models.ManyToManyField(
+        Vulnerability, through='ScanDetail'
+    )
+    scan_date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.CASCADE
+    )
+
+
+class ScanDetail(models.Model):
+    vulnerability = models.ForeignKey(
+        Vulnerability, null=True, blank=True, on_delete=models.CASCADE
+    )
+    scan = models.ForeignKey(
+        Scan, null=True, blank=True, on_delete=models.CASCADE
+    )
+
+
 @receiver(pre_delete, sender=Collection)
 def delete_file(sender, instance, **kwargs):
     if instance.file:

@@ -29,3 +29,6 @@ class UserAdmin(BaseUserAdmin):
 admin.site.register(models.User, UserAdmin)
 
 admin.site.register(models.Collection)
+admin.site.register(models.Vulnerability)
+admin.site.register(models.Scan)
+admin.site.register(models.ScanDetail)

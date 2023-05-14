@@ -1,11 +1,10 @@
 import requests
+from ..models import ScanDetail
 
 
-def run(url):
+def run(url, scan_id):
     results = []
-    # Set the API endpoint URL
 
-    # List the security headers you want to check
     security_headers = [
         "X-XSS-Protection",
         "X-Content-Type-Options",
@@ -14,12 +13,14 @@ def run(url):
         "Strict-Transport-Security",
     ]
 
-    # Make a request to the API
     response = requests.get(url)
-    print(response.text)
-    # Check for missing security headers
+    print("RESPONSE", response.text)
+
     for header in security_headers:
         if header not in response.headers:
+            # vulnerability = Vulnerability.objects.get(title=header)
+            ScanDetail.objects.create(vulnerability_id=1, scan_id=scan_id)
+
             results.append(header)
             print(f"{header} header is missing")
 

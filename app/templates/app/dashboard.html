@@ -2,8 +2,41 @@
 {% block content %}
 
 <h6>NUMBERS</h6>
+{{ severity_counts.Info }}
+{{ severity_counts.Low }}
+{{ severity_counts.Medium }}
+{{ severity_counts.High }}
 <br>
 <h6>CHARTS</h6>
+
+<div class="card mb-4">
+    <div class="card-header pb-0 p-3">
+        <div class="d-flex justify-content-between">
+            <h6 class="mb-0">Channels</h6>
+            <button type="button"
+                class="btn btn-icon-only btn-rounded btn-outline-secondary mb-0 ms-2 btn-sm d-flex align-items-center justify-content-center"
+                data-bs-toggle="tooltip" data-bs-placement="bottom" title=""
+                data-bs-original-title="See traffic channels" data-original-title="">
+                <i class="material-icons text-sm">priority_high</i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body pb-0 p-3 mt-4">
+        <div class="row">
+            <div class="col-7 text-start">
+                <div class="chart">
+                    <!-- <canvas class="chart-canvas chart-pie" height="400" style="display: block; box-sizing: border-box; height: 400px; width: 734.9px;" width="734"></canvas> -->
+                    <canvas id="myChart" class="chart-canvas chart-pie" height="400"
+                        style="display: block; box-sizing: border-box; height: 400px; width: 734.9px;"
+                        width="734"></canvas>
+                </div>
+            </div>
+            <div class="col-5 my-auto">
+
+            </div>
+        </div>
+    </div>
+</div>
 
 {% if loggedin %}
 <a href="{% url 'logout' %}" class="btn bg-gradient-info btn-sm ">
