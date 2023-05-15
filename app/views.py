@@ -11,10 +11,7 @@ from .models import Collection, Scan, ScanDetail
 
 def home(request):
     user = request.user
-
-    loggedin = True
-    if str(user) == "AnonymousUser":
-        loggedin = False
+    is_loggedin = user.is_authenticated
 
     severity_counts = {
         'All': 0,
@@ -24,7 +21,7 @@ def home(request):
         'Info': 0,
     }
 
-    if loggedin:
+    if is_loggedin:
         scans = Scan.objects.filter(user=user)
     else:
         scans = Scan.objects.filter(user__isnull=True)
@@ -65,7 +62,6 @@ def home(request):
     ]
 
     context = {
-        'loggedin': loggedin,
         'severity_counts': severity_counts,
         'chart_data': chart_data,
     }
@@ -74,10 +70,12 @@ def home(request):
 
 def collections(request):
     user = request.user
-    if str(user) == "AnonymousUser":
-        collections = Collection.objects.all()
-    else:
+    is_loggedin = user.is_authenticated
+
+    if is_loggedin:
         collections = user.collection_set.all()
+    else:
+        collections = Collection.objects.all()
 
     context = {'collections': collections}
     return render(request, 'app/collections.html', context)
@@ -86,16 +84,17 @@ def collections(request):
 def createCollection(request):
     if request.method == 'POST':
         user = request.user
+        is_loggedin = user.is_authenticated
 
         uploaded_file = request.FILES['collection-file']
         file_name = uploaded_file.name
 
-        if str(user) == "AnonymousUser":
-            collection = Collection(title=file_name, file=uploaded_file)
-        else:
+        if is_loggedin:
             collection = Collection(
                 title=file_name, file=uploaded_file, owner=user
             )
+        else:
+            collection = Collection(title=file_name, file=uploaded_file)
 
         collection.save()
         return redirect('collections')
@@ -103,8 +102,33 @@ def createCollection(request):
     return render(request, 'app/create-collection.html')
 
 
+# def viewCollection(request, pk):
+#     collection = Collection.objects.get(id=pk)
+#     spec_file_path = collection.file.path
+
+#     sp = SpecificationParser(spec_file_path, 'openapi')
+
+#     openapi_spec = sp.parse()
+
+#     openapi_spec_json = json.dumps(openapi_spec)
+#     context = {"spec": openapi_spec_json}
+#     return render(request, 'view-collection.html', context)
+
+
 def viewCollection(request, pk):
-    collection = Collection.objects.get(id=pk)
+    user = request.user
+    is_loggedin = user.is_authenticated
+
+    try:
+        if is_loggedin:
+            collection = Collection.objects.filter(owner=user).get(id=pk)
+        else:
+            collection = Collection.objects.filter(owner__isnull=True).get(
+                id=pk
+            )
+    except Exception:
+        return render(request, 'error.html')
+
     spec_file_path = collection.file.path
 
     sp = SpecificationParser(spec_file_path, 'openapi')
@@ -118,7 +142,19 @@ def viewCollection(request, pk):
 
 def deleteCollection(request, pk):
     if request.method == 'DELETE':
-        collection = Collection.objects.get(id=pk)
+        user = request.user
+        is_loggedin = user.is_authenticated
+
+        try:
+            if is_loggedin:
+                collection = Collection.objects.filter(owner=user).get(id=pk)
+            else:
+                collection = Collection.objects.filter(owner__isnull=True).get(
+                    id=pk
+                )
+        except Exception:
+            return render(request, 'error.html')
+
         collection.delete()
 
         return HttpResponse('Success', status=200)
@@ -129,6 +165,8 @@ import time
 
 def newScan(request):
     user = request.user
+    is_loggedin = user.is_authenticated
+
     if request.method == 'POST':
         coll = request.POST['collection']
         coll_id, coll_title = coll.split('_')
@@ -137,27 +175,30 @@ def newScan(request):
 
         scan_type = request.POST['scantype']
 
-        if str(user) == "AnonymousUser":
-            scan = Scan.objects.create(
-                scan_type=scan_type, coll_title=coll_title
-            )
-        else:
+        if is_loggedin:
             scan = Scan.objects.create(
                 user=user, scan_type=scan_type, coll_title=coll_title
             )
+        else:
+            scan = Scan.objects.create(
+                scan_type=scan_type, coll_title=coll_title
+            )
 
         time.sleep(5)
-        main.runTests(spec_file_path, 'openapi', scan.id)
+        try:
+            main.runTests(spec_file_path, 'openapi', scan.id)
+        except Exception:
+            print("EXCEPTION")
 
         scan.finished = True
         scan.save()
 
         return redirect('single-scan', scan.id)
 
-    if str(user) == "AnonymousUser":
-        collections = Collection.objects.all()
-    else:
+    if is_loggedin:
         collections = user.collection_set.all()
+    else:
+        collections = Collection.objects.all()
 
     context = {"collections": collections}
     return render(request, 'app/new-scan.html', context)
@@ -165,11 +206,12 @@ def newScan(request):
 
 def scans(request):
     user = request.user
+    is_loggedin = user.is_authenticated
 
-    if str(user) == "AnonymousUser":
-        scans = Scan.objects.filter(user__isnull=True).order_by('-scan_date')
-    else:
+    if is_loggedin:
         scans = Scan.objects.filter(user=user).order_by('-scan_date')
+    else:
+        scans = Scan.objects.filter(user__isnull=True).order_by('-scan_date')
 
     context = {"scans": scans}
     return render(request, 'app/scans.html', context)
@@ -177,12 +219,13 @@ def scans(request):
 
 def singleScan(request, pk):
     user = request.user
+    is_loggedin = user.is_authenticated
 
     try:
-        if str(user) == "AnonymousUser":
-            scan = Scan.objects.filter(user__isnull=True).get(id=pk)
-        else:
+        if is_loggedin:
             scan = Scan.objects.filter(user=user).get(id=pk)
+        else:
+            scan = Scan.objects.filter(user__isnull=True).get(id=pk)
     except Exception:
         return render(request, 'error.html')
 
@@ -194,11 +237,13 @@ def singleScan(request, pk):
 
 def singleScanVuln(request, pk, pk2):
     user = request.user
+    is_loggedin = user.is_authenticated
+
     try:
-        if str(user) == "AnonymousUser":
-            scan = Scan.objects.filter(user__isnull=True).get(id=pk)
-        else:
+        if is_loggedin:
             scan = Scan.objects.filter(user=user).get(id=pk)
+        else:
+            scan = Scan.objects.filter(user__isnull=True).get(id=pk)
     except Exception:
         return render(request, 'error.html')
 
