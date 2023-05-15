@@ -102,19 +102,6 @@ def createCollection(request):
     return render(request, 'app/create-collection.html')
 
 
-# def viewCollection(request, pk):
-#     collection = Collection.objects.get(id=pk)
-#     spec_file_path = collection.file.path
-
-#     sp = SpecificationParser(spec_file_path, 'openapi')
-
-#     openapi_spec = sp.parse()
-
-#     openapi_spec_json = json.dumps(openapi_spec)
-#     context = {"spec": openapi_spec_json}
-#     return render(request, 'view-collection.html', context)
-
-
 def viewCollection(request, pk):
     user = request.user
     is_loggedin = user.is_authenticated
@@ -188,12 +175,14 @@ def newScan(request):
         try:
             main.runTests(spec_file_path, 'openapi', scan.id)
         except Exception:
-            print("EXCEPTION")
+            scan.status = 'FAILED'
+            scan.save()
+            return redirect('scans')
 
-        scan.finished = True
+        scan.status = 'COMPLETED'
         scan.save()
 
-        return redirect('single-scan', scan.id)
+        return redirect('scans')
 
     if is_loggedin:
         collections = user.collection_set.all()

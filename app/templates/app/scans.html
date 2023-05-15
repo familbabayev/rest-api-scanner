@@ -46,11 +46,12 @@
                                     </td>
                                     <td class="">
                                         <span class="text-secondary text-md font-weight-bold mx-3">
-
-                                            {% if scan.finished == False %}
+                                            {% if scan.status == "RUNNING" %}
                                             <span class="badge badge-sm bg-gradient-warning">RUNNING</span>
-                                            {% else %}
+                                            {% elif scan.status == "COMPLETED" %}
                                             <span class="badge badge-sm bg-gradient-success">COMPLETED</span>
+                                            {% else %}
+                                            <span class="badge badge-sm bg-gradient-danger">FAILED</span>
                                             {% endif %}
                                         </span>
                                     </td>

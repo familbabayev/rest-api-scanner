@@ -65,7 +65,7 @@ class Scan(models.Model):
     scan_date = models.DateTimeField(auto_now_add=True)
     scan_type = models.CharField(max_length=150)
     coll_title = models.CharField(max_length=255)
-    finished = models.BooleanField(default=False)
+    status = models.CharField(max_length=150, default="RUNNING")
     user = models.ForeignKey(
         User, null=True, blank=True, on_delete=models.CASCADE
     )
