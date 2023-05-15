@@ -1,46 +1,121 @@
 {% extends 'main.html' %}
 {% block content %}
 
-<h6>NUMBERS</h6>
-{{ severity_counts.Info }}
-{{ severity_counts.Low }}
-{{ severity_counts.Medium }}
-{{ severity_counts.High }}
-<br>
-<h6>CHARTS</h6>
+{{ chart_data|json_script:"chartData" }}
 
-<div class="card mb-4">
-    <div class="card-header pb-0 p-3">
-        <div class="d-flex justify-content-between">
-            <h6 class="mb-0">Channels</h6>
-            <button type="button"
-                class="btn btn-icon-only btn-rounded btn-outline-secondary mb-0 ms-2 btn-sm d-flex align-items-center justify-content-center"
-                data-bs-toggle="tooltip" data-bs-placement="bottom" title=""
-                data-bs-original-title="See traffic channels" data-original-title="">
-                <i class="material-icons text-sm">priority_high</i>
-            </button>
-        </div>
-    </div>
-    <div class="card-body pb-0 p-3 mt-4">
-        <div class="row">
-            <div class="col-7 text-start">
-                <div class="chart">
-                    <!-- <canvas class="chart-canvas chart-pie" height="400" style="display: block; box-sizing: border-box; height: 400px; width: 734.9px;" width="734"></canvas> -->
-                    <canvas id="myChart" class="chart-canvas chart-pie" height="400" width="400"></canvas>
+<div class="row my-4 mx-3 py-4 ">
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+        <div class="card">
+            <div class="card-header p-3 pt-2">
+
+                <div class="text-end pt-1">
+                    <p class="text-sm mb-0 text-capitalize"></p>
+                    <h2 class="mb-0">{{ severity_counts.All }}</h2>
                 </div>
             </div>
-            <div class="col-5 my-auto">
+            <hr class="dark horizontal my-0">
+            <div class="card-footer p-3">
+                <p class="mb-0"><span class="text-md font-weight-bolder">All Vulnerabilites</span></p>
+            </div>
+        </div>
+    </div>
 
+    <div class="col-xl-2 col-sm-6 mb-xl-0 mb-4">
+        <div class="card">
+            <div class="card-header p-3 pt-2">
+                <div
+                    class="icon icon-lg icon-shape bg-gradient-danger shadow-danger text-center border-radius-xl mt-n4 position-absolute">
+
+                </div>
+                <div class="text-end pt-1">
+                    <p class="text-sm mb-0 text-capitalize"></p>
+                    <h2 class="mb-0">{{ severity_counts.High }}</h2>
+                </div>
+            </div>
+            <hr class="dark horizontal my-0">
+            <div class="card-footer p-3">
+                <p class="mb-0"><span class="text-md font-weight-bolder">Critical</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-2 col-sm-6 mb-xl-0 mb-4">
+        <div class="card">
+            <div class="card-header p-3 pt-2">
+                <div
+                    class="icon icon-lg icon-shape bg-gradient-warning shadow-warning text-center border-radius-xl mt-n4 position-absolute">
+
+                </div>
+                <div class="text-end pt-1">
+                    <p class="text-sm mb-0 text-capitalize"></p>
+                    <h2 class="mb-0">{{ severity_counts.Medium }}</h2>
+                </div>
+            </div>
+            <hr class="dark horizontal my-0">
+            <div class="card-footer p-3">
+                <p class="mb-0"><span class="text-md font-weight-bolder">Medium</span></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2 col-sm-6">
+        <div class="card">
+            <div class="card-header p-3 pt-2">
+                <div
+                    class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
+
+                </div>
+                <div class="text-end pt-1">
+                    <p class="text-sm mb-0 text-capitalize"></p>
+                    <h2 class="mb-0">{{ severity_counts.Low }}</h2>
+                </div>
+            </div>
+            <hr class="dark horizontal my-0">
+            <div class="card-footer p-3">
+                <p class="mb-0"><span class="text-md font-weight-bolder">Low</span></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2 col-sm-6">
+        <div class="card">
+            <div class="card-header p-3 pt-2">
+                <div
+                    class="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
+                </div>
+                <div class="text-end pt-1">
+                    <p class="text-sm mb-0 text-capitalize"></p>
+                    <h2 class="mb-0">{{ severity_counts.Info }}</h2>
+                </div>
+            </div>
+            <hr class="dark horizontal my-0">
+            <div class="card-footer p-3">
+                <p class="mb-0"><span class="text-md font-weight-bolder">Informational</span></p>
             </div>
         </div>
     </div>
 </div>
 
-{% if loggedin %}
-<a href="{% url 'logout' %}" class="btn bg-gradient-info btn-sm ">
-    Logout
-</a>
-{% endif %}
+
+<div class="card mb-1 mx-4 pb-4">
+    <div class="card-header pb-0 p-3">
+        <div class="d-flex justify-content-between">
+            <h6 class="mb-0">Vulnerabilites Pie Chart</h6>
+        </div>
+    </div>
+    <div class="card-body pb-4 p-3 mt-4">
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-3 text-start ">
+                <div class="chart">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+            <div class="col-3">
+                Distribution of All Found Vulnerabilites according to their severity
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 
 {% endblock %}

@@ -16,36 +16,74 @@ def home(request):
     if str(user) == "AnonymousUser":
         loggedin = False
 
+    severity_counts = {
+        'All': 0,
+        'High': 0,
+        'Medium': 0,
+        'Low': 0,
+        'Info': 0,
+    }
+
     if loggedin:
-        scan = Scan.objects.get(user=user)
+        scans = Scan.objects.filter(user=user)
 
-        severity_counts = {'High': 0, 'Medium': 0, 'Low': 0, 'Info': 0}
+        for scan in scans:
+            count_info = ScanDetail.objects.filter(
+                scan=scan, vulnerability__severity="Info"
+            ).count()
+            severity_counts["Info"] += count_info
 
-        count_info = ScanDetail.objects.filter(
-            scan=scan, vulnerability__severity="Info"
-        ).count()
-        severity_counts["Info"] = count_info
+            count_low = ScanDetail.objects.filter(
+                scan=scan, vulnerability__severity="Low"
+            ).count()
+            severity_counts["Low"] += count_low
 
-        count_low = ScanDetail.objects.filter(
-            scan=scan, vulnerability__severity="Low"
-        ).count()
-        severity_counts["Low"] = count_low
+            count_medium = ScanDetail.objects.filter(
+                scan=scan, vulnerability__severity="Medium"
+            ).count()
+            severity_counts["Medium"] += count_medium
 
-        count_medium = ScanDetail.objects.filter(
-            scan=scan, vulnerability__severity="Medium"
-        ).count()
-        severity_counts["Medium"] = count_medium
+            count_high = ScanDetail.objects.filter(
+                scan=scan, vulnerability__severity="High"
+            ).count()
+            severity_counts["High"] += count_high
 
-        count_high = ScanDetail.objects.filter(
-            scan=scan, vulnerability__severity="High"
-        ).count()
-        severity_counts["High"] = count_high
+            severity_counts["All"] = (
+                severity_counts["Info"]
+                + severity_counts["Low"]
+                + severity_counts["Medium"]
+                + severity_counts["High"]
+            )
+
+    chart_data = [
+        severity_counts["High"],
+        severity_counts["Medium"],
+        severity_counts["Low"],
+        severity_counts["Info"],
+    ]
 
     context = {
         'loggedin': loggedin,
         'severity_counts': severity_counts,
+        'chart_data': chart_data,
     }
     return render(request, 'app/dashboard.html', context)
+
+
+# def home(request):
+#     severity_counts = {
+#         'All': 0,
+#         'High': 0,
+#         'Medium': 0,
+#         'Low': 0,
+#         'Info': 0,
+#     }
+
+#     context = {
+#         'chart_data': severity_counts,
+#     }
+
+#     return render(request, 'app/dashboard.html', context)
 
 
 def collections(request):
@@ -126,7 +164,12 @@ def newScan(request):
 
 
 def scans(request):
-    return render(request, 'app/single-scan.html')
+    user = request.user
+
+    scans = Scan.objects.filter(user=user).order_by('-scan_date')
+
+    context = {"scans": scans}
+    return render(request, 'app/scans.html', context)
 
 
 def singleScan(request, pk):

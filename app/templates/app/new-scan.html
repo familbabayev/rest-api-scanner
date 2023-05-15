@@ -3,46 +3,51 @@
 
 <div class="container-fluid py-4">
     <div class="row">
-        <div class="col-4 mx-4">
+        <div class="col-5 mx-auto">
+            <div class="card z-index-0 fadeIn3 fadeInBottom">
 
-            <form action="" method="post">
-                {% csrf_token %}
-                <div class="form-group">
+                <h4 class="font-weight-bolder text-center mt-4 mb-0">New Scan</h4>
 
-                    <div class="input-group input-group-static mb-4">
-                        <label for="exampleFormControlSelect1" class="ms-0">
-                            <h6>API Collection</h6>
-                        </label>
-                        <select class="form-control" id="exampleFormControlSelect1" name="collection">
-                            {% for collection in collections %}
-                            <option value="{{ collection.id }}">{{ collection.title }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
+                <div class="card-body">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
 
-                    <div class="input-group input-group-static mb-4">
-                        <label for="exampleFormControlSelect1" class="ms-0">
-                            <h6>Authentication Type</h6>
-                        </label>
-                        <select class="form-control" id="exampleFormControlSelect1" name="authtype">
-                            <option>Basic Authentication</option>
-                            <option>JSON Web Token</option>
-                            <option>OAuth</option>
-                        </select>
-                    </div>
+                            <div class="input-group input-group-static mb-4">
+                                <label for="exampleFormControlSelect1" class="ms-0">
+                                    <h6>API Collection</h6>
+                                </label>
+                                <select class="form-control" id="exampleFormControlSelect1" name="collection">
+                                    {% for collection in collections %}
+                                    <option value="{{ collection.id }}">{{ collection.title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
 
-
-                    <div class="input-group input-group-static mb-4">
-                        <label for="exampleFormControlSelect1" class="ms-0">
-                            <h6>Authentication Details</h6>
-                        </label>
-                        <div class="input-group input-group-dynamic">
-                            <textarea class="form-control" rows="5" placeholder="" spellcheck="false"></textarea>
-                        </div>
-                    </div>
+                            <div class="input-group input-group-static mb-4">
+                                <label for="exampleFormControlSelect1" class="ms-0">
+                                    <h6>Authentication Type</h6>
+                                </label>
+                                <select class="form-control" id="exampleFormControlSelect1" name="authtype">
+                                    <option>Basic Authentication</option>
+                                    <option>JSON Web Token</option>
+                                    <option>OAuth</option>
+                                </select>
+                            </div>
 
 
-                    <!-- <div class="input-group input-group-static mb-4">
+                            <div class="input-group input-group-static mb-4">
+                                <label for="exampleFormControlSelect1" class="ms-0">
+                                    <h6>Authentication Details</h6>
+                                </label>
+                                <div class="input-group input-group-dynamic">
+                                    <textarea class="form-control" rows="5" placeholder=""
+                                        spellcheck="false"></textarea>
+                                </div>
+                            </div>
+
+
+                            <!-- <div class="input-group input-group-static mb-4">
                         <label for="exampleFormControlSelect1" class="ms-0">
                             <h6>Scan Type</h6>
                         </label>
@@ -51,28 +56,30 @@
                             <option>Full Scan</option>
                         </select>
                     </div> -->
-                    <label for="" class="ms-0">
-                        <h6>Scan Type</h6>
-                    </label>
-                    <div class="input-group input-group-static mb-4">
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="radio" name="scantype" value="quick"
-                                id="customRadio1">
-                            <label class="custom-control-label" for="customRadio1">Quick Scan</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="scantype" value="full" id="customRadio2">
-                            <label class="custom-control-label" for="customRadio2">Full Scan</label>
-                        </div>
-                    </div>
+                            <label for="" class="ms-0">
+                                <h6>Scan Type</h6>
+                            </label>
+                            <div class="input-group input-group-static mb-4">
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" name="scantype" value="quick"
+                                        id="customRadio1">
+                                    <label class="custom-control-label" for="customRadio1">Quick Scan</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="scantype" value="full"
+                                        id="customRadio2">
+                                    <label class="custom-control-label" for="customRadio2">Full Scan</label>
+                                </div>
+                            </div>
 
-                    <button type="submit" class="btn btn-secondary">START SCAN</button>
+                            <button type="submit" class="btn btn-secondary">START SCAN</button>
 
+                        </div>
                 </div>
+
+                </form>
+            </div>
         </div>
-
-        </form>
-
 
     </div>
 </div>
