@@ -26,34 +26,36 @@ def home(request):
 
     if loggedin:
         scans = Scan.objects.filter(user=user)
+    else:
+        scans = Scan.objects.filter(user__isnull=True)
 
-        for scan in scans:
-            count_info = ScanDetail.objects.filter(
-                scan=scan, vulnerability__severity="Info"
-            ).count()
-            severity_counts["Info"] += count_info
+    for scan in scans:
+        count_info = ScanDetail.objects.filter(
+            scan=scan, vulnerability__severity="Info"
+        ).count()
+        severity_counts["Info"] += count_info
 
-            count_low = ScanDetail.objects.filter(
-                scan=scan, vulnerability__severity="Low"
-            ).count()
-            severity_counts["Low"] += count_low
+        count_low = ScanDetail.objects.filter(
+            scan=scan, vulnerability__severity="Low"
+        ).count()
+        severity_counts["Low"] += count_low
 
-            count_medium = ScanDetail.objects.filter(
-                scan=scan, vulnerability__severity="Medium"
-            ).count()
-            severity_counts["Medium"] += count_medium
+        count_medium = ScanDetail.objects.filter(
+            scan=scan, vulnerability__severity="Medium"
+        ).count()
+        severity_counts["Medium"] += count_medium
 
-            count_high = ScanDetail.objects.filter(
-                scan=scan, vulnerability__severity="High"
-            ).count()
-            severity_counts["High"] += count_high
+        count_high = ScanDetail.objects.filter(
+            scan=scan, vulnerability__severity="High"
+        ).count()
+        severity_counts["High"] += count_high
 
-            severity_counts["All"] = (
-                severity_counts["Info"]
-                + severity_counts["Low"]
-                + severity_counts["Medium"]
-                + severity_counts["High"]
-            )
+        severity_counts["All"] = (
+            severity_counts["Info"]
+            + severity_counts["Low"]
+            + severity_counts["Medium"]
+            + severity_counts["High"]
+        )
 
     chart_data = [
         severity_counts["High"],
@@ -68,22 +70,6 @@ def home(request):
         'chart_data': chart_data,
     }
     return render(request, 'app/dashboard.html', context)
-
-
-# def home(request):
-#     severity_counts = {
-#         'All': 0,
-#         'High': 0,
-#         'Medium': 0,
-#         'Low': 0,
-#         'Info': 0,
-#     }
-
-#     context = {
-#         'chart_data': severity_counts,
-#     }
-
-#     return render(request, 'app/dashboard.html', context)
 
 
 def collections(request):
@@ -138,19 +124,33 @@ def deleteCollection(request, pk):
         return HttpResponse('Success', status=200)
 
 
+import time
+
+
 def newScan(request):
     user = request.user
     if request.method == 'POST':
-        collection_id = request.POST['collection']
-        collection = Collection.objects.get(id=collection_id)
+        coll = request.POST['collection']
+        coll_id, coll_title = coll.split('_')
+        collection = Collection.objects.get(id=coll_id)
         spec_file_path = collection.file.path
 
-        if str(user) == "AnonymousUser":
-            scan = Scan.objects.create()
-        else:
-            scan = Scan.objects.create(user=user)
+        scan_type = request.POST['scantype']
 
+        if str(user) == "AnonymousUser":
+            scan = Scan.objects.create(
+                scan_type=scan_type, coll_title=coll_title
+            )
+        else:
+            scan = Scan.objects.create(
+                user=user, scan_type=scan_type, coll_title=coll_title
+            )
+
+        time.sleep(5)
         main.runTests(spec_file_path, 'openapi', scan.id)
+
+        scan.finished = True
+        scan.save()
 
         return redirect('single-scan', scan.id)
 
@@ -166,7 +166,10 @@ def newScan(request):
 def scans(request):
     user = request.user
 
-    scans = Scan.objects.filter(user=user).order_by('-scan_date')
+    if str(user) == "AnonymousUser":
+        scans = Scan.objects.filter(user__isnull=True).order_by('-scan_date')
+    else:
+        scans = Scan.objects.filter(user=user).order_by('-scan_date')
 
     context = {"scans": scans}
     return render(request, 'app/scans.html', context)
@@ -175,16 +178,36 @@ def scans(request):
 def singleScan(request, pk):
     user = request.user
 
-    last_scan = Scan.objects.filter(user=user).latest('id')
+    try:
+        if str(user) == "AnonymousUser":
+            scan = Scan.objects.filter(user__isnull=True).get(id=pk)
+        else:
+            scan = Scan.objects.filter(user=user).get(id=pk)
+    except Exception:
+        return render(request, 'error.html')
 
-    scan_details = last_scan.scandetail_set.select_related('vulnerability')
+    scan_details = scan.scandetail_set.select_related('vulnerability')
 
-    context = {'scan_details': scan_details, 'last_scan_id': last_scan.id}
+    context = {'scan_details': scan_details, 'last_scan_id': scan.id}
     return render(request, 'app/single-scan.html', context)
 
 
 def singleScanVuln(request, pk, pk2):
-    return render(request, 'app/single-scan-vuln.html')
+    user = request.user
+    try:
+        if str(user) == "AnonymousUser":
+            scan = Scan.objects.filter(user__isnull=True).get(id=pk)
+        else:
+            scan = Scan.objects.filter(user=user).get(id=pk)
+    except Exception:
+        return render(request, 'error.html')
+
+    scan_detail = scan.scandetail_set.select_related('vulnerability').get(
+        id=pk2
+    )
+    print(scan_detail)
+    context = {'scan_detail': scan_detail}
+    return render(request, 'app/single-scan-vuln.html', context)
 
 
 def registerUser(request):

@@ -63,6 +63,9 @@ class Scan(models.Model):
         Vulnerability, through='ScanDetail'
     )
     scan_date = models.DateTimeField(auto_now_add=True)
+    scan_type = models.CharField(max_length=150)
+    coll_title = models.CharField(max_length=255)
+    finished = models.BooleanField(default=False)
     user = models.ForeignKey(
         User, null=True, blank=True, on_delete=models.CASCADE
     )

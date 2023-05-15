@@ -30,13 +30,18 @@
                                 <tr class="clickable-row"
                                     data-href="{% url 'single-scan-vuln' last_scan_id scan_detail.id %}">
                                     <td class="">
-                                        <span class="text-secondary text-xs font-weight-bold mx-3"></span>
-                                    </td>
-                                    <td class="">
-                                        <span class="text-secondary text-xs font-weight-bold mx-3"></span>
+                                        <span class="text-secondary text-xs font-weight-bold mx-3">
+                                            {{ scan_detail }}
+                                        </span>
                                     </td>
                                     <td class="">
                                         <span class="text-secondary text-xs font-weight-bold mx-3">
+                                            {{ scan_detail.vulnerability }}
+                                        </span>
+                                    </td>
+                                    <td class="">
+                                        <span class="text-secondary text-xs font-weight-bold mx-3">
+
                                             {{ scan_detail.vulnerability.title }}
                                         </span>
                                     </td>

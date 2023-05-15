@@ -115,7 +115,11 @@
     </div>
 </div>
 
-
+{% if loggedin %}
+<a href="{% url 'logout' %}" class="btn bg-gradient-info btn-sm ">
+    Logout
+</a>
+{% endif %}
 
 
 {% endblock %}

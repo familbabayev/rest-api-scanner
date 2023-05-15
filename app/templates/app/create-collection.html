@@ -1,31 +1,31 @@
 {% extends 'main.html' %}
 {% block content %}
 
-
 <div class="container-fluid py-4">
     <div class="row">
-        <div class="col-12">
-            <form action="" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="form-group row">
-                    <label for="file-input" class="col-form-label">Postman, Swagger and OpenAPI Specification 3 API
-                        definitions files are
-                        supported</label>
-                    <label class="col-form-label">Upload JSON or YAML file</label>
-                    <input name="collection-file" type="file" class="form-control-file mb-3" id="file-input"
-                        accept=".json,.yaml,.yml">
-                </div>
+        <div class="col-8 mx-auto">
+            <div class="card z-index-0 fadeIn3 fadeInBottom">
+                <h4 class="font-weight-bolder text-center mt-4 mb-0">API Collection Upload</h4>
+                <div class="card-body">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
 
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+                        <div class="form-group row">
+                            <label for="file-input" class="col-form-label">
+                                Swagger and OpenAPI Specification 3 API
+                                definitions files are supported.
+                            </label>
+                            <label class="col-form-label mb-3">Upload JSON or YAML file.</label>
+                            <input name="collection-file" type="file" class="form-control-file mb-3" id="file-input"
+                                accept=".json,.yaml,.yml">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
-<!-- <div class="form-group">
-    <label for="file-input">Upload JSON or YAML file</label>
-    <input type="file" class="form-control-file" id="file-input" accept=".json,.yaml,.yml">
-    <small class="form-text text-muted">Supported file types: JSON and YAML</small>
-</div> -->
 
 {% endblock %}

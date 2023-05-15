@@ -16,8 +16,6 @@
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
                                         API Collection Name</th>
-                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
-                                        API Collection Type</th>
                                     <th class="text-secondary opacity-7"></th>
                                     <th class="text-secondary opacity-7"></th>
                                 </tr>
@@ -28,11 +26,6 @@
                                     <td class="align-middle text-center">
                                         <span class="text-secondary text-sm font-weight-bold">
                                             {{ collection.title }}
-                                        </span>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <span class="text-secondary text-sm font-weight-bold">
-                                            OpenApi 3
                                         </span>
                                     </td>
                                     <td class="align-middle text-center">
@@ -58,7 +51,7 @@
             </div>
 
             <a href="{% url 'create-collection' %}" class="btn btn-primary">
-                <i class="material-icons">add</i> Add
+                <i class="material-icons">add</i> Add Collection
             </a>
         </div>
     </div>

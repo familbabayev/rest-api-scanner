@@ -31,12 +31,12 @@
                                 <tr>
                                     <td class="">
                                         <span class="text-secondary text-sm font-weight-bold mx-3">
-                                            openapiVam.json
+                                            {{ scan.coll_title }}
                                         </span>
                                     </td>
                                     <td class="">
                                         <span class="text-secondary text-sm font-weight-bold mx-3">
-                                            Quick Scan
+                                            {{ scan.scan_type }} Scan
                                         </span>
                                     </td>
                                     <td class="">
@@ -45,13 +45,13 @@
                                         </span>
                                     </td>
                                     <td class="">
-                                        <span class="text-secondary text-sm font-weight-bold mx-3">
-                                            <div class="progress">
-                                                <div class="progress-bar bg-gradient-success" role="progressbar"
-                                                    aria-valuenow="80" aria-valuemin="0" aria-valuemax="80"
-                                                    style="width: 100%;"></div>
-                                            </div>
-                                            100%
+                                        <span class="text-secondary text-md font-weight-bold mx-3">
+
+                                            {% if scan.finished == False %}
+                                            <span class="badge badge-sm bg-gradient-warning">RUNNING</span>
+                                            {% else %}
+                                            <span class="badge badge-sm bg-gradient-success">COMPLETED</span>
+                                            {% endif %}
                                         </span>
                                     </td>
                                     <td class="align-middle text-center">
@@ -62,31 +62,6 @@
                                     </td>
                                 </tr>
                                 {% endfor %}
-
-                                <tr>
-                                    <td class="">
-                                        <span
-                                            class="text-secondary text-xs font-weight-bold mx-3">openapiVam.json</span>
-                                    </td>
-                                    <td class="">
-                                        <span class="text-secondary text-xs font-weight-bold mx-3">Quick Scan</span>
-                                    </td>
-                                    <td class="">
-                                        <span class="text-secondary text-xs font-weight-bold mx-3">May 14, 2023, 11:18
-                                            a.m.</span>
-                                    </td>
-                                    <td class="">
-                                        <span class="text-secondary text-xs font-weight-bold mx-3">
-                                            <!-- <div class="progress">
-                                                <div class="progress-bar bg-gradient-info" role="progressbar"
-                                                    aria-valuenow="80" aria-valuemin="0" aria-valuemax="80"
-                                                    style="width: 50%;"></div>
-                                            </div>
-                                            50% -->
-                                            <span class="badge badge-sm bg-gradient-warning">RUNNING</span>
-                                        </span>
-                                    </td>
-                                </tr>
 
                             </tbody>
                         </table>

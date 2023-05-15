@@ -6,7 +6,23 @@
     <div class="row">
         <div class="col-12">
             <div class="card my-4">
-                asdfasdf
+                {{ scan_detail }}
+                <br>
+                {{ scan_detail.scan }}
+                <br>
+                {{ scan_detail.scan.scan_date }}
+                <br>
+                {{ scan_detail.scan.scan_type }}
+                <br>
+                {{ scan_detail.scan.coll_title }}
+                <br>
+                {{ scan_detail.vulnerability }}
+                <br>
+                {{ scan_detail.vulnerability.title }}
+                <br>
+                {{ scan_detail.vulnerability.recommendation }}
+                <br>
+                {{ scan_detail.vulnerability.severity }}
             </div>
         </div>
     </div>
