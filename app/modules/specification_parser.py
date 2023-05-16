@@ -1,5 +1,5 @@
 import json
-import os
+import yaml
 
 
 class SpecificationParser:
@@ -14,19 +14,16 @@ class SpecificationParser:
             return openapi_spec
 
     def parse_yaml(self):
-        pass
-
-    def parse_postman(self):
-        pass
+        with open(self.file_path, 'r') as file:
+            openapi_spec = yaml.safe_load(file)
+            return openapi_spec
 
     def parse(self):
-        if self.type == 'openapi':
-            _, file_extension = os.path.splitext(self.file_path)
-            if file_extension == '.json':
-                return self.parse_json()
-            if file_extension == '.yaml':
-                return self.parse_yaml()
-        elif self.type == 'postman':
-            self.parse_postman()
+        if self.file_path.endswith('.json'):
+            return self.parse_json()
+        elif self.file_path.endswith('.yaml') or self.file_path.endswith(
+            '.yml'
+        ):
+            return self.parse_yaml()
         else:
-            return ''
+            raise ValueError('Unsupported file type')

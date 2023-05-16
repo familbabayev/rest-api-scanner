@@ -57,6 +57,9 @@ class Vulnerability(models.Model):
     recommendation = models.TextField()
     severity = models.CharField(max_length=150)
 
+    def __str__(self):
+        return f"{self.id}, {self.title}"
+
 
 class Scan(models.Model):
     vulnerabilities = models.ManyToManyField(
@@ -78,6 +81,9 @@ class ScanDetail(models.Model):
     scan = models.ForeignKey(
         Scan, null=True, blank=True, on_delete=models.CASCADE
     )
+    response = models.TextField(null=True, blank=True)
+    issue = models.TextField(null=True, blank=True)
+    url = models.CharField(max_length=255)
 
 
 @receiver(pre_delete, sender=Collection)

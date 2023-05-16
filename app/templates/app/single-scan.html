@@ -2,25 +2,24 @@
 {% block content %}
 
 
-<div class="container-fluid py-4">
+<div class="container-fluid pb-4">
     <div class="row">
         <div class="col-12">
-            <div class="card my-4">
-                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-
-                </div>
+            <a href="{% url 'scans' %}" class="btn bg-gradient-info btn-sm ">
+                Back
+            </a>
+            <div class="card">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2"></div>
                 <div class="card-body px-0 pb-2">
                     <div class="table-responsive p-0">
                         <table class="table align-items-center mb-0">
                             <thead>
                                 <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-8">
-                                        METHOD</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-8">
-                                        ENDPOINTS</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-8">
+                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-8">
+                                        ENDPOINT</th>
+                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-8">
                                         VULNERABILITY</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-8">
+                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-8">
                                         SEVERITY</th>
                                 </tr>
                             </thead>
@@ -30,74 +29,23 @@
                                 <tr class="clickable-row"
                                     data-href="{% url 'single-scan-vuln' last_scan_id scan_detail.id %}">
                                     <td class="">
-                                        <span class="text-secondary text-xs font-weight-bold mx-3">
-                                            {{ scan_detail }}
+                                        <span class="text-secondary text-sm font-weight-bold mx-3">
+                                            {{ scan_detail.url }}
                                         </span>
                                     </td>
                                     <td class="">
-                                        <span class="text-secondary text-xs font-weight-bold mx-3">
-                                            {{ scan_detail.vulnerability }}
-                                        </span>
-                                    </td>
-                                    <td class="">
-                                        <span class="text-secondary text-xs font-weight-bold mx-3">
-
+                                        <span class="text-secondary text-sm font-weight-bold mx-3">
                                             {{ scan_detail.vulnerability.title }}
                                         </span>
                                     </td>
                                     <td class="">
-                                        <span class="text-secondary text-xs font-weight-bold mx-3">
-                                            {{ scan_detail.vulnerability.severity }}</span>
+                                        <span class="text-secondary text-sm font-weight-bold mx-3">
+                                            {{ scan_detail.vulnerability.severity }}
+                                        </span>
                                     </td>
                                 </tr>
                                 {% endfor %}
 
-                                <tr>
-                                    <td class="">
-                                        <span class="text-secondary text-xs font-weight-bold mx-3">POST</span>
-                                    </td>
-                                    <td class="">
-                                        <span
-                                            class="text-secondary text-xs font-weight-bold mx-3">/users/v1/register</span>
-                                    </td>
-                                    <td class="">
-                                        <span class="text-secondary text-xs font-weight-bold mx-3">SQL Injection</span>
-                                    </td>
-                                    <td class="">
-                                        <span class="text-secondary text-xs font-weight-bold mx-3">High</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="">
-                                        <span class="text-secondary text-xs font-weight-bold mx-3">POST</span>
-                                    </td>
-                                    <td class="">
-                                        <span
-                                            class="text-secondary text-xs font-weight-bold mx-3">/users/v1/login</span>
-                                    </td>
-                                    <td class="">
-                                        <span class="text-secondary text-xs font-weight-bold mx-3">SQL Injection</span>
-                                    </td>
-                                    <td class="">
-                                        <span class="text-secondary text-xs font-weight-bold mx-3">Medium</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="">
-                                        <span class="text-secondary text-xs font-weight-bold mx-3">GET</span>
-                                    </td>
-                                    <td class="">
-                                        <span
-                                            class="text-secondary text-xs font-weight-bold mx-3">/books/v1/{book_title}</span>
-                                    </td>
-                                    <td class="">
-                                        <span class="text-secondary text-xs font-weight-bold mx-3">Broken
-                                            Authentication</span>
-                                    </td>
-                                    <td class="">
-                                        <span class="text-secondary text-xs font-weight-bold mx-3">High</span>
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>

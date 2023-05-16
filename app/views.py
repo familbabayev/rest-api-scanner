@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login, logout
+from django.db.models import Case, When, Value, IntegerField
 import json
 
 from .forms import CustomAuthenticationForm, CustomUserCreationForm
@@ -147,9 +148,6 @@ def deleteCollection(request, pk):
         return HttpResponse('Success', status=200)
 
 
-import time
-
-
 def newScan(request):
     user = request.user
     is_loggedin = user.is_authenticated
@@ -171,7 +169,6 @@ def newScan(request):
                 scan_type=scan_type, coll_title=coll_title
             )
 
-        time.sleep(5)
         try:
             main.runTests(spec_file_path, 'openapi', scan.id)
         except Exception:
@@ -218,7 +215,17 @@ def singleScan(request, pk):
     except Exception:
         return render(request, 'error.html')
 
-    scan_details = scan.scandetail_set.select_related('vulnerability')
+    severity_ordering = Case(
+        When(vulnerability__severity='High', then=Value(1)),
+        When(vulnerability__severity='Medium', then=Value(2)),
+        When(vulnerability__severity='Low', then=Value(3)),
+        When(vulnerability__severity='Informational', then=Value(4)),
+        default=Value(5),
+        output_field=IntegerField(),
+    )
+    scan_details = scan.scandetail_set.select_related('vulnerability').order_by(
+        severity_ordering
+    )
 
     context = {'scan_details': scan_details, 'last_scan_id': scan.id}
     return render(request, 'app/single-scan.html', context)
@@ -239,8 +246,8 @@ def singleScanVuln(request, pk, pk2):
     scan_detail = scan.scandetail_set.select_related('vulnerability').get(
         id=pk2
     )
-    print(scan_detail)
-    context = {'scan_detail': scan_detail}
+
+    context = {'scan_detail': scan_detail, "scan_id": pk}
     return render(request, 'app/single-scan-vuln.html', context)
 
 

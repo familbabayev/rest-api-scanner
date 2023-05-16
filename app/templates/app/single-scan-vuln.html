@@ -2,29 +2,68 @@
 {% block content %}
 
 
-<div class="container-fluid py-4">
+<div class="container-fluid pb-4">
     <div class="row">
         <div class="col-12">
-            <div class="card my-4">
-                {{ scan_detail }}
-                <br>
-                {{ scan_detail.scan }}
-                <br>
-                {{ scan_detail.scan.scan_date }}
-                <br>
-                {{ scan_detail.scan.scan_type }}
-                <br>
-                {{ scan_detail.scan.coll_title }}
-                <br>
-                {{ scan_detail.vulnerability }}
-                <br>
-                {{ scan_detail.vulnerability.title }}
-                <br>
-                {{ scan_detail.vulnerability.recommendation }}
-                <br>
-                {{ scan_detail.vulnerability.severity }}
+            <a href="{% url 'single-scan' scan_id %}" class="btn bg-gradient-info btn-sm ">
+                Back
+            </a>
+            <div class="card z-index-0 fadeIn3 fadeInBottom">
+                <h4 class="font-weight-bolder text-center mt-4 mb-0">Vulnerability Details</h4>
+                <sp class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th class="text-start text-md">Collection Title:</th>
+                                    <td class="text-md">{{ scan_detail.scan.coll_title }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-start text-md">Scan Type:</th>
+                                    <td class="text-md">{{ scan_detail.scan.scan_type }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-start text-md">Scan Date:</th>
+                                    <td class="text-md">{{ scan_detail.scan.scan_date }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-start text-md">URL:</th>
+                                    <td class="text-md">{{ scan_detail.url }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-start text-md">Vulnerability:</th>
+                                    <td class="text-md">{{ scan_detail.vulnerability.title }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-start text-md">Severity:</th>
+                                    <td class="text-md">{{ scan_detail.vulnerability.severity }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mx-2">
+                        <div class="pt-2">
+                            <span class="text-secondary text-lg">
+                                <h5>Issue:</h5>
+                                {{ scan_detail.issue }}
+                            </span>
+                        </div>
+
+                        <span class="text-secondary text-lg mx-2">
+                            <h5>Response:</h5>
+                            {{ scan_detail.response|safe }}
+                        </span>
+
+                        <span class="text-secondary text-lg mx-2">
+                            <h5>Remediation:</h5>
+                            {{ scan_detail.vulnerability.recommendation|safe }}
+                        </span>
+                    </div>
             </div>
+
         </div>
     </div>
+</div>
 </div>
 {% endblock %}
