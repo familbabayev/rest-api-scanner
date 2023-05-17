@@ -1,10 +1,9 @@
-import requests
 from ..models import ScanDetail
-from .utils import create_response_text
+from .utils import make_request, create_response_text
 from urllib.parse import urljoin
 
 
-def run(url, scan_id):
+def run(url, scan):
     files_to_access = [
         "../../../../etc/passwd",
         "../../../../var/www/html/index.html",
@@ -16,7 +15,7 @@ def run(url, scan_id):
         final_url = urljoin(url, file)
 
         try:
-            response = requests.get(final_url)
+            response = make_request(final_url, "GET", scan.auth_detail)
             response.raise_for_status()
         except Exception:
             continue
@@ -31,7 +30,7 @@ def run(url, scan_id):
             ):
                 ScanDetail.objects.create(
                     vulnerability_id=8,
-                    scan_id=scan_id,
+                    scan_id=scan.id,
                     issue=f"Potential Directory Traversal vulnerability found at {final_url}",
                     response=response_text,
                     url=final_url,

@@ -69,6 +69,8 @@ class Scan(models.Model):
     scan_type = models.CharField(max_length=150)
     coll_title = models.CharField(max_length=255)
     status = models.CharField(max_length=150, default="RUNNING")
+    auth_type = models.CharField(max_length=150)
+    auth_detail = models.TextField()
     user = models.ForeignKey(
         User, null=True, blank=True, on_delete=models.CASCADE
     )

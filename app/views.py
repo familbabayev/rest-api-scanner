@@ -154,23 +154,34 @@ def newScan(request):
 
     if request.method == 'POST':
         coll = request.POST['collection']
-        coll_id, coll_title = coll.split('_')
+        coll_id, coll_title = coll.split(':')
         collection = Collection.objects.get(id=coll_id)
         spec_file_path = collection.file.path
 
         scan_type = request.POST['scantype']
+        auth_type = request.POST['authtype']
+        auth_detail = request.POST['authdetail']
+        if auth_type == "None":
+            auth_detail = False
 
         if is_loggedin:
             scan = Scan.objects.create(
-                user=user, scan_type=scan_type, coll_title=coll_title
+                user=user,
+                scan_type=scan_type,
+                coll_title=coll_title,
+                auth_type=auth_type,
+                auth_detail=auth_detail,
             )
         else:
             scan = Scan.objects.create(
-                scan_type=scan_type, coll_title=coll_title
+                scan_type=scan_type,
+                coll_title=coll_title,
+                auth_type=auth_type,
+                auth_detail=auth_detail,
             )
 
         try:
-            main.runTests(spec_file_path, 'openapi', scan.id)
+            main.runTests(spec_file_path, scan)
         except Exception:
             scan.status = 'FAILED'
             scan.save()

@@ -1,9 +1,9 @@
-import requests, re
 from ..models import ScanDetail
-from .utils import create_response_text
+from .utils import make_request, create_response_text
+import re
 
 
-def run(url, scan_id, paths):
+def run(url, scan, paths):
     sensitive_data_patterns = [
         r'\d{3}-\d{2}-\d{4}',  # SSN
         r'\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z|a-z]{2,7}\b',  # Email
@@ -20,13 +20,13 @@ def run(url, scan_id, paths):
         r'((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,})',  # Strong Password
     ]
 
-    response = requests.get(url)
+    response = make_request(url, "GET", scan.auth_detail)
     response_text = create_response_text(response)
 
     if 'https' not in response.url:
         ScanDetail.objects.create(
             vulnerability_id=6,
-            scan_id=scan_id,
+            scan_id=scan.id,
             issue=f"Data might not be encrypted! HTTPS is not used. {response.url}",
             response=response_text,
             url=response.url,
@@ -35,14 +35,15 @@ def run(url, scan_id, paths):
     for path, path_item in paths.items():
         full_url = f"{url}{path}"
         print(full_url)
-        response = requests.get(full_url)
+
+        response = make_request(full_url, "GET", scan.auth_detail)
         response_text = create_response_text(response)
 
         for pattern in sensitive_data_patterns:
             if re.search(pattern, response.text):
                 ScanDetail.objects.create(
                     vulnerability_id=6,
-                    scan_id=scan_id,
+                    scan_id=scan.id,
                     issue=f"Sensitive data might be exposed! Found pattern: {pattern}",
                     response=response_text,
                     url=full_url,

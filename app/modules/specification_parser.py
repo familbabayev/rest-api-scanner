@@ -3,9 +3,8 @@ import yaml
 
 
 class SpecificationParser:
-    def __init__(self, file_path, type=None):
+    def __init__(self, file_path):
         self.file_path = file_path
-        self.type = type
         self.format = format
 
     def parse_json(self):

@@ -17,7 +17,7 @@
                                 </label>
                                 <select class="form-control" id="exampleFormControlSelect1" name="collection">
                                     {% for collection in collections %}
-                                    <option value="{{ collection.id }}_{{ collection.title }}">{{ collection.title }}
+                                    <option value="{{ collection.id }}:{{ collection.title }}">{{ collection.title }}
                                     </option>
                                     {% endfor %}
                                 </select>
@@ -28,9 +28,8 @@
                                     <h6>Authentication Type</h6>
                                 </label>
                                 <select class="form-control" id="exampleFormControlSelect1" name="authtype">
-                                    <option>Basic Authentication</option>
-                                    <option>JSON Web Token</option>
-                                    <option>OAuth</option>
+                                    <option>None</option>
+                                    <option>API Token</option>
                                 </select>
                             </div>
 
@@ -40,8 +39,8 @@
                                     <h6>Authentication Details</h6>
                                 </label>
                                 <div class="input-group input-group-dynamic">
-                                    <textarea class="form-control" rows="5" placeholder=""
-                                        spellcheck="false"></textarea>
+                                    <textarea class="form-control" rows="5" placeholder="Example: Bearer {TOKEN}"
+                                        name="authdetail" spellcheck="false"></textarea>
                                 </div>
                             </div>
 

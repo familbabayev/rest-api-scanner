@@ -1,9 +1,8 @@
-import requests
 from ..models import ScanDetail
-from .utils import create_response_text
+from .utils import make_request, create_response_text
 
 
-def run(url, scan_id):
+def run(url, scan):
     security_headers = [
         (1, "X-XSS-Protection"),
         (2, "X-Content-Type-Options"),
@@ -12,14 +11,14 @@ def run(url, scan_id):
         (5, "Strict-Transport-Security"),
     ]
 
-    response = requests.get(url)
+    response = make_request(url, "GET", scan.auth_detail)
     response_text = create_response_text(response)
 
     for id, header in security_headers:
         if header not in response.headers:
             ScanDetail.objects.create(
                 vulnerability_id=id,
-                scan_id=scan_id,
+                scan_id=scan.id,
                 issue=f"{header} header is missing",
                 response=response_text,
                 url=url,
@@ -28,7 +27,7 @@ def run(url, scan_id):
     if 'Server' in response.headers:
         ScanDetail.objects.create(
             vulnerability_id=9,
-            scan_id=scan_id,
+            scan_id=scan.id,
             issue=f"Server version disclosed: {response.headers['Server']}",
             response=response_text,
             url=url,
