@@ -10,7 +10,6 @@
                     <form action="" method="post">
                         {% csrf_token %}
                         <div class="form-group">
-
                             <div class="input-group input-group-static mb-4">
                                 <label for="exampleFormControlSelect1" class="ms-0">
                                     <h6>API Collection</h6>
@@ -22,7 +21,6 @@
                                     {% endfor %}
                                 </select>
                             </div>
-
                             <div class="input-group input-group-static mb-4">
                                 <label for="exampleFormControlSelect1" class="ms-0">
                                     <h6>Authentication Type</h6>
@@ -32,8 +30,6 @@
                                     <option>API Token</option>
                                 </select>
                             </div>
-
-
                             <div class="input-group input-group-static mb-4">
                                 <label for="exampleFormControlSelect1" class="ms-0">
                                     <h6>Authentication Details</h6>
@@ -43,7 +39,6 @@
                                         name="authdetail" spellcheck="false"></textarea>
                                 </div>
                             </div>
-
                             <label for="" class="ms-0">
                                 <h6>Scan Type</h6>
                             </label>
@@ -59,20 +54,13 @@
                                     <label class="custom-control-label" for="customRadio2">Full Scan</label>
                                 </div>
                             </div>
-
                             <button type="submit" class="btn btn-secondary">START SCAN</button>
-
                         </div>
+                    </form>
                 </div>
-
-                </form>
             </div>
         </div>
-
     </div>
 </div>
-
-</div>
-
 
 {% endblock %}

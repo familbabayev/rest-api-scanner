@@ -1,7 +1,6 @@
 {% extends 'main.html' %}
 {% block content %}
 
-
 <div class="container-fluid pb-4">
     <div class="row">
         <div class="col-12">
@@ -24,7 +23,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-
                                 {% for scan_detail in scan_details %}
                                 <tr class="clickable-row"
                                     data-href="{% url 'single-scan-vuln' last_scan_id scan_detail.id %}">
@@ -45,7 +43,6 @@
                                     </td>
                                 </tr>
                                 {% endfor %}
-
                             </tbody>
                         </table>
                     </div>

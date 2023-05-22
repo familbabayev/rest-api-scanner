@@ -119,7 +119,7 @@ def viewCollection(request, pk):
 
     spec_file_path = collection.file.path
 
-    sp = SpecificationParser(spec_file_path, 'openapi')
+    sp = SpecificationParser(spec_file_path)
 
     openapi_spec = sp.parse()
 
