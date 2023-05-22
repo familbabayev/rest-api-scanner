@@ -15,7 +15,12 @@ Open-source REST API Security Scanner with Web Interface
 3. Install the requirements in the virtual environment 
 
     ```pip install -r requirements.txt```
-4. Run the server
+4. Run the migrations
+    
+    ```python manage.py migrate```
+5. Populate the app_vulnerability table with the data provided in the data folder
+
+6. Run the project
     
     ```python manage.py runserver```
 
@@ -37,3 +42,9 @@ To run this project, you will need to add the following environment variables to
 `DATABASE_HOST` - Database Host
 
 `DATABASE_PORT` - Database Port
+
+## Environment Variables
+
+Some screenshots from the project:
+
+![Alt text](/dashboard.png)
