@@ -42,9 +42,3 @@ To run this project, you will need to add the following environment variables to
 `DATABASE_HOST` - Database Host
 
 `DATABASE_PORT` - Database Port
-
-## Environment Variables
-
-Some screenshots from the project:
-
-![Image](https://github.com/familbabayev/repository/blob/main/data/dashboard.png?raw=true)
