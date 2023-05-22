@@ -1,19 +1,18 @@
 import requests
-import sqlmap
 import subprocess
 
 from ..models import ScanDetail
 from .utils import create_response_text
 
 
-def run(url, scan_id, paths):
+def run(url, scan, paths):
     sqlmap_cmd = 'sqlmap -u {url} --batch -o'
 
     for path, path_item in paths.items():
         full_url = f"{url}{path}"
-        print(full_url)
-        # response = requests.get(full_url)
-        # response_text = create_response_text(response)
+
+        response = requests.get(full_url)
+        response_text = create_response_text(response)
 
         cmd = sqlmap_cmd.format(url=full_url)
 
@@ -28,12 +27,14 @@ def run(url, scan_id, paths):
 
         # Wait for the process to finish and capture its output
         output, error = proc.communicate()
-        vulnerabilities = []
         for line in output.decode("utf-8").split("\n"):
-            # if "Vulnerability found:" in line:
             if "vulnerab" in line:
-                # vulnerability_type = line.split(":")[1].strip()
-                # vulnerabilities.append(vulnerability_type)
-                vulnerabilities.append(line)
+                ScanDetail.objects.create(
+                    vulnerability_id=10,
+                    scan_id=scan.id,
+                    issue=f"SQL Injection found: {line}",
+                    response=response_text,
+                    url=full_url,
+                )
 
-    return vulnerabilities
+    return 1
