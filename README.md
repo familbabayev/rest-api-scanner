@@ -47,4 +47,4 @@ To run this project, you will need to add the following environment variables to
 
 Some screenshots from the project:
 
-![Alt text](/dashboard.png)
+![Image](https://github.com/familbabayev/repository/blob/main/dashboard.png?raw=true)
